@@ -1,25 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
 import java.util.*;
 import java.awt.event.*;
+import java.awt.Toolkit;
 
 public class GUI
 {
     JFrame window = new JFrame();
     JPanel panel = new JPanel(null);
 
-    JButton close = new JButton();
-
-    JTabbedPane theTabs = new JTabbedPane();
-
     int x = 0;
     int y = 0;
-
-    boolean value = false;
+    int boundX = 0;
+    int boundY = 0;
 
     public void init()
     {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        boundX = (int)screenSize.getWidth();
+        boundY = (int)screenSize.getHeight();
         window.addWindowListener(new WindowAdapter()
         {
             public void windowClosing(WindowEvent windowEvent)
@@ -27,10 +26,6 @@ public class GUI
                 makeNew();
             }
             public void windowClosed(WindowEvent windowEvent)
-            {
-                makeNew();
-            }
-            public void windowConfined(WindowEvent windowEvent)
             {
                 makeNew();
             }
@@ -47,6 +42,7 @@ public class GUI
         window.setLocation(random());
         panel.setSize(500, 250);
         window.setUndecorated(true);
+        window.setAlwaysOnTop(true);
         try
         {
             ImageIcon image = new ImageIcon("picture.jpg");
@@ -58,21 +54,21 @@ public class GUI
         }
         catch(Exception e)
         {
+            System.out.println("Something went wrong :(");
         }
         window.add(panel);
         window.setVisible(true);
     }
 
-    public void closed()
-    {
-        value = true;
-    }
-
     public void makeNew()
     {
+        MultiThread thread = new MultiThread();
+        thread.start();
+        /*
         window.setLocation(random());
         window.add(panel);
         window.setVisible(true);
+         */
     }
 
     public void run()
@@ -85,8 +81,8 @@ public class GUI
     {
         Random rand = new Random();
         Point p = new Point();
-        x = rand.nextInt(1920);
-        y = rand.nextInt(1080);
+        x = rand.nextInt(boundX-300);
+        y = rand.nextInt(boundY-160);
         p.setLocation(x,y);
         return p;
     }
